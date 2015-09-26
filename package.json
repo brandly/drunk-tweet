@@ -1,0 +1,22 @@
+{
+  "name": "drunk-tweet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lilaconlee/drunk-tweet.git"
+  },
+  "author": "lila",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lilaconlee/drunk-tweet/issues"
+  },
+  "homepage": "https://github.com/lilaconlee/drunk-tweet#readme",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
