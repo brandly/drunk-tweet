@@ -1,11 +1,14 @@
 var express = require('express');
+var http = require('http');
 var app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
 var env = require('node-env-file');
 var twitterAPI = require('twitter');
 
-var app = express();
-
 env(__dirname + '/.env');
+
+server.listen(3000);
 
 var client = new twitterAPI({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -14,23 +17,32 @@ var client = new twitterAPI({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
-client.stream('statuses/filter', {track: '#drunk'}, function(stream) {
-    stream.on('data', function(tweet) {
+io.on('connection', function (socket) {
+  console.log('Connected!');
+
+  client.stream('statuses/filter', {track: 'drunk'},function (stream){
+    stream.on('data', function (tweet) {
+      console.log('--------------------------');
       console.log(tweet.text);
+
+      io.sockets.emit('stream', tweet);
     });
 
     stream.on('error', function(error) {
+      console.log('erroring');
       throw error;
     });
+  });
 });
+
 
 app.get('/', function (req, res) {
-  res.send('yo yo yo');
+  res.sendFile(__dirname +  '/index.html');
 });
 
-var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Listenin\' for drunk tweets...');
-});
+// var server = app.listen(3001, function () {
+//   var host = server.address().address;
+//   var port = server.address().port;
+//
+//   console.log('Listenin\\' for drunk tweets...');
+// });
